@@ -1,0 +1,22 @@
+server:
+  port: 8099
+spring:
+  cloud:
+    nacos:
+      discovery:
+        server-addr: localhost:8848
+    gateway:
+      routes:
+        - id: springcloud-consumer
+          uri: lb://springcloud-consumer
+          predicates:
+            - Path=/consumer/**
+          filters:
+            - RewritePath=/consumer/(?<segment>.*),/$\{segment}
+        - id: springcloud-provider
+          uri: lb://springloud-provider
+          predicates:
+            - Path=/provider/**
+          filters:
+            - RewritePath=/provider/(?<segment>.*),/$\{segment}
+#消费者和生产者都配置在网关中
